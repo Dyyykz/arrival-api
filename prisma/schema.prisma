@@ -9,3 +9,21 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model user {
+  id       String @id @default(uuid())
+  username String @unique
+  password String
+  isActive Int    @default(0) @map(name: "is_active")
+
+  arrival arrival[]
+}
+
+model arrival {
+  id    String    @id @default(uuid())
+  enter DateTime? @db.Timestamp()
+  out   DateTime? @db.Timestamp()
+
+  user   user?   @relation(fields: [userId], references: [id])
+  userId String?
+}
